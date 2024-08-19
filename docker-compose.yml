@@ -1,0 +1,21 @@
+version: "3.6"
+services:
+ your-site:
+   image: wordpress:latest
+   container_name: your-site
+   volumes:
+     - ./wordpress:/var/www/html
+     - ./change-url.sh:/usr/local/bin/change-url.sh
+     - ./.env:/usr/local/bin/.env
+   environment:
+     - WORDPRESS_DB_NAME
+     - WORDPRESS_TABLE_PREFIX
+     - WORDPRESS_DB_HOST
+     - WORDPRESS_DB_USER
+     - WORDPRESS_DB_PASSWORD
+     - WORDPRESS_PORT
+     - WORDPRESS_DEBUG=1
+   restart: always
+   ports:
+     - "${WORDPRESS_PORT}:80"
+   entrypoint: ["/bin/bash", "-c", "/usr/local/bin/change-url.sh"]
