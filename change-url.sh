@@ -13,8 +13,8 @@ while ! [ -f /var/www/html/wp-config.php ]; do
 done
 
 # Define the lines to be added or updated
-wp_home_line="define('WP_HOME', 'http://localhost:${WORDPRESS_PORT}');"
-wp_siteurl_line="define('WP_SITEURL', 'http://localhost:${WORDPRESS_PORT}');"
+wp_home_line="define('WP_HOME', 'http://localhost:${DOCKER_PORT}');"
+wp_siteurl_line="define('WP_SITEURL', 'http://localhost:${DOCKER_PORT}');"
 remote_media_url_line="define('REMOTE_MEDIA_URL', 'https://${WORDPRESS_URL}');"
 
 # Replace the lines if they exist, otherwise add them

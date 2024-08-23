@@ -26,7 +26,15 @@
    cp .env.sample .env
    ```
 
-   Update the `.env` file with your WordPress and database settings.
+   This file contains the port number you would like to use for your WordPress instance.
+
+   Copy the `.env.your-name.sample` file to `.env.your-name`:
+
+   ```bash
+   cp .env.your-name.sample .env.your-name
+   ```
+
+   Update the `.env.your-name` file with your WordPress and database settings.
 
 3. **Make the script executable**:
 
@@ -34,16 +42,18 @@
    chmod +x change-url.sh
    ```
 
-4. **Start the Docker Containers**:
+4. **Start the Docker Container**:
 
    ```bash
-   docker-compose up
+   docker compose up your-name
    ```
 
    This command initiates the WordPress container as per the configuration in `docker-compose.yml`.
 
 5. **Access Your WordPress Site**:
-   Open your browser and navigate to `http://localhost:<WORDPRESS_PORT>`.
+   Open your browser and navigate to `http://localhost:<DOCKER_PORT>`.
+
+Note: remember to change 'your-name' to the name of your service.
 
 ## File Synchronization and Environment Management
 
@@ -56,19 +66,24 @@ The `change-url.sh` script automates the updating of the WordPress URL configura
 
 ## Environment Variables
 
+### .env
+
+- `DOCKER_PORT`: The port on which your WordPress instance will be accessible.
+
+### .env.your-name
+
 - `WORDPRESS_DB_NAME`: The name of your WordPress database.
 - `WORDPRESS_TABLE_PREFIX`: The prefix for your WordPress database tables.
 - `WORDPRESS_DB_HOST`: The database host.
 - `WORDPRESS_DB_USER`: The database user.
 - `WORDPRESS_DB_PASSWORD`: The password for the database user.
-- `WORDPRESS_PORT`: The port on which your WordPress instance will be accessible.
 - `WORDPRESS_URL`: The base URL of the WordPress site, usually the staging environment.
 
 ## Advanced Usage
 
 ### Managing Multiple Environments
 
-To manage multiple environments, duplicate the service definitions in `docker-compose.yml` and create corresponding `.env` files with unique port numbers and database credentials. This method ensures that each environment operates independently while sharing the same Docker infrastructure.
+To manage multiple environments, duplicate the service definitions in `docker-compose.yml` and create corresponding `.env.your-other-name` files with database credentials. This method ensures that each environment operates independently while sharing the same Docker infrastructure.
 
 ### Handling Media Files
 
