@@ -17,14 +17,49 @@ wp_home_line="define('WP_HOME', 'http://localhost:${DOCKER_PORT}');"
 wp_siteurl_line="define('WP_SITEURL', 'http://localhost:${DOCKER_PORT}');"
 remote_media_url_line="define('REMOTE_MEDIA_URL', 'https://${WORDPRESS_URL}');"
 
-# Replace the lines if they exist, otherwise add them
-sed -i.bak -e "/define('WP_HOME',/c\\
-${wp_home_line}" \
--e "/define('WP_SITEURL',/c\\
-${wp_siteurl_line}" \
--e "/define('REMOTE_MEDIA_URL',/c\\
-${remote_media_url_line}" /var/www/html/wp-config.php
+# Check if the custom function is already present
+if grep -q "define('WP_HOME'," /var/www/html/wp-config.php; then
+    sed -i.bak -e "/define('WP_HOME',/c\\
+    ${wp_home_line}" /var/www/html/wp-config.php
+else
+if grep -q "ob_start" /var/www/html/wp-config.php; then
+        sed -i "/ob_start('ob_replace_home_url');/i \\
+        ${wp_home_line}" /var/www/html/wp-config.php
+    else
+        sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i \\
+        ${wp_home_line}" /var/www/html/wp-config.php
+    fi
+fi
 
+# Check if the custom function is already present
+if grep -q "define('WP_SITEURL'," /var/www/html/wp-config.php; then
+    sed -i.bak -e "/define('WP_SITEURL',/c\\
+    ${wp_siteurl_line}" /var/www/html/wp-config.php
+else
+    if grep -q "ob_start" /var/www/html/wp-config.php; then
+        sed -i "/ob_start('ob_replace_home_url');/i \\
+        ${wp_siteurl_line}" /var/www/html/wp-config.php
+    else
+        sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i \\
+        ${wp_siteurl_line}" /var/www/html/wp-config.php
+    fi
+fi
+
+# Check if the custom function is already present
+if grep -q "define('REMOTE_MEDIA_URL'," /var/www/html/wp-config.php; then
+    sed -i.bak -e "/define('REMOTE_MEDIA_URL',/c\\
+    ${remote_media_url_line}" /var/www/html/wp-config.php
+else
+    if grep -q "ob_start" /var/www/html/wp-config.php; then
+        sed -i "/ob_start('ob_replace_home_url');/i \\
+        ${remote_media_url_line}\\n\
+        " /var/www/html/wp-config.php
+    else
+        sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i \\
+        ${remote_media_url_line}\\n\
+        " /var/www/html/wp-config.php
+    fi
+fi
 
 # Check if the custom function is already present
 if grep -q "function ob_replace_home_url" /var/www/html/wp-config.php; then
